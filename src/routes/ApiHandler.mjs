@@ -5,14 +5,13 @@ import ApiService from "../services/ApiService.mjs";
 
 const router = express.Router();
 
-const createService = (dataProvider:DataProvider) => new ApiService(dataProvider);
+const createService = (req:*) => new ApiService(req.custom.dataProvider);
 
 const verification = (apiService:ApiService) =>
     (type: 'EMAIL' | 'PHONE', value:string, code:string) => apiService.verify(type,value,code);
 
 const verifyEmail = (req, res) => {
-const verifyEmail = (req, res) => {
-    const verify = verification(createService(req.custom.dataProvider));
+    const verify = verification(createService(req));
     const {code, email} = req.params;
 
     verify('EMAIL',email,code).then(result => {
@@ -21,7 +20,7 @@ const verifyEmail = (req, res) => {
 };
 
 const verifyPhone = (req, res) => {
-    const verify = verification(createService(req.custom.dataProvider));
+    const verify = verification(createService(req));
     const {code, phone} = req.params;
 
     verify('PHONE',phone,code).then(result => {
