@@ -1,6 +1,8 @@
 //@flow
 import BaseProvider from './providers/baseProvider.mjs';
 import PostGresProvider from './providers/postgresProvider.mjs';
+import SendgridProvider from './providers/sendgridProvider.mjs';
+import TwilioProvider from './providers/twilioProvider.mjs';
 
 export class DataProvider {
     get:(provider:string) => *;
@@ -43,6 +45,8 @@ const init = () => {
     }
 
     installProvider(new PostGresProvider());
+    installProvider(new SendgridProvider());
+    installProvider(new TwilioProvider());
 
     return initServices(servicesToInit);
 }
