@@ -9,6 +9,7 @@ import routes from './routes/index.mjs';
 
 import http from 'http';
 import type {DataProvider} from "./services/data/dataProvider.mjs";
+import apiHandler from "./routes/ApiHandler.mjs";
 
 const debug = console.log;
 
@@ -31,7 +32,10 @@ const start = (dataProvider:DataProvider) => {
        next();
     });
 
+    app.use('/api', apiHandler);
     app.use('/', routes);
+
+
 
     app.use(function(req, res, next) {
         var err = new Error('Not Found');
@@ -39,17 +43,17 @@ const start = (dataProvider:DataProvider) => {
     });
     if (app.get('env') === 'development') {
         app.use(function(err, req, res, next) {
-            res.status(err.status || 500); //$FlowShutUp
-            res.render('error', {
-                message: err.message, //$FlowShutUp
+            res.status(err.status || 500);
+            res.json({
+                message: err.message,
                 error: err
             });
         });
     }
     app.use(function(err, req, res) {
-        res.status(err.status || 500);//$FlowShutUp
-        res.render('error', {
-            message: err.message,//$FlowShutUp
+        res.status(err.status || 500);
+        res.json({
+            message: err.message,
             error: {}
         });
     });
