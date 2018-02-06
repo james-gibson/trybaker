@@ -18,6 +18,7 @@ class TwilioProvider extends BaseProvider {
     service: *;
 
     constructor() {
+        console.log('    Initializing Twilio Provider');
         super();
         this.key = PROVIDERS.TWILIO;
 

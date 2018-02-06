@@ -7,6 +7,7 @@ class PostGresProvider extends BaseProvider {
     service: *;
 
     constructor() {
+        console.log('    Initializing False Postgres Provider')
         super();
         this.key = PROVIDERS.POSTGRES;
 

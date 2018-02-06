@@ -12,7 +12,7 @@ export class DataProvider {
 }
 
 const initServices = (servicesToInit:Map<string, $Subtype<BaseProvider>>) => {
-    console.log('Initializing data services');
+
 
     const serviceList: Array<$Subtype<BaseProvider>> = [];
 
@@ -39,6 +39,7 @@ const initServices = (servicesToInit:Map<string, $Subtype<BaseProvider>>) => {
 }
 
 const init = () => {
+    console.log('Initializing data services');
     const servicesToInit: Map<string, $Subtype<BaseProvider>> = new Map();
     const installProvider = (provider: $Subtype<BaseProvider>) => {
         servicesToInit.set(provider.key, provider);
