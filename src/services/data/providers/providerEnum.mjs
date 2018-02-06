@@ -1,7 +1,7 @@
 const PROVIDERS = {
     POSTGRES: 'POSTGRES',
-    REDIS: 'REDIS',
-    REDUX: 'REDUX',
+    SENDGRID: 'SENDGRID',
+    TWILIO: 'TWILIO',
 };
 
 export default PROVIDERS;
