@@ -1,6 +1,7 @@
 const PROVIDERS = {
     POSTGRES: 'POSTGRES',
     SENDGRID: 'SENDGRID',
+    SWAGGER: 'SWAGGER',
     TWILIO: 'TWILIO',
 };
 

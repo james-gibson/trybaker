@@ -1,9 +1,7 @@
 import express from 'express';
+import PROVIDERS from "../services/data/providers/providerEnum.mjs";
 var router = express.Router();
 
-const swaggerDefinition = {
-
-};
 
 /* Health check route */
 router.get('/', function(req, res) {
@@ -12,7 +10,10 @@ router.get('/', function(req, res) {
 });
 
 router.get('/swagger', function(req, res) {
-    res.json(swaggerDefinition);
+    const dataProvider = req.custom.dataProvider;
+    const Swagger = dataProvider.get(PROVIDERS.SWAGGER);
+
+    res.json(Swagger);
 });
 
 
