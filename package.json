@@ -6,6 +6,7 @@
     "install:secrets": "wget -q -O .env https://gist.githubusercontent.com/james-gibson/52ed5275c4983d7d91359cde6e8a7096/raw/0b04a2a84d1316335cef236235aa6f701271c18b/.env",
     "build": "flow-remove-types src/ -d lib/",
     "start": "npm run build && node --require dotenv/config  --harmony --experimental-modules ./lib/index.mjs",
+    "migrate": "knex migrate:latest",
     "flow": "flow",
     "flow:check": "flow check ./src/ --color always"
   },
@@ -19,7 +20,9 @@
     "express": "~4.13.1",
     "hbs": "~3.1.0",
     "huejay": "^1.5.0",
+    "knex": "^0.14.2",
     "morgan": "~1.6.1",
+    "pg": "^7.4.1",
     "twilio": "^3.11.2"
   },
   "devDependencies": {
