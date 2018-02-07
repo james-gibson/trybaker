@@ -1,6 +1,7 @@
 //@flow
 import express from 'express';
-import {DataProvider} from "../services/data/dataProvider.mjs";
+import isValidEmail from 'is-valid-email';
+import isPhoneNumber from 'is-phone-number';
 import ApiService from "../services/ApiService.mjs";
 
 const router = express.Router();
@@ -11,8 +12,17 @@ const verification = (apiService:ApiService) =>
     (type: 'EMAIL' | 'PHONE', value:string, code:string) => apiService.verify(type,value,code);
 
 const verifyEmail = (req, res) => {
-    const verify = verification(createService(req));
     const {code, email} = req.params;
+
+    if(!isValidEmail(decodeURI(email))){
+        res.statusCode = 400;
+        res.json({status: 'error', message:'invaild input'});
+
+        return;
+    }
+
+    const verify = verification(createService(req));
+
 
     verify('EMAIL',email,code).then(result => {
         res.json(result);
@@ -20,8 +30,16 @@ const verifyEmail = (req, res) => {
 };
 
 const verifyPhone = (req, res) => {
-    const verify = verification(createService(req));
     const {code, phone} = req.params;
+    const verify = verification(createService(req));
+
+    console.log(phone, decodeURI(phone), isPhoneNumber(decodeURI(phone)));
+    if(!isPhoneNumber(decodeURI(phone))){
+        res.statusCode = 400;
+        res.json({status: 'error', message:'invaild input'});
+
+        return;
+    }
 
     verify('PHONE',phone,code).then(result => {
         res.json(result);
