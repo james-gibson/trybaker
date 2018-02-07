@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
         table.string('firstName');
         table.string('lastName');
         table.string('phoneNumber');
+        table.boolean('newCustomer').default(true);
         table.boolean('validatedPhoneNumber');
         table.boolean('validatedEmailAddress');
         table.string('emailAddress');
