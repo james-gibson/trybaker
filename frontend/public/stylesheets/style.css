@@ -7,6 +7,7 @@ body{
   padding: 0;
   margin: 0;
   font-family: Helvetica;
+  text-align: center;
 }
 
 main:before {
@@ -25,8 +26,49 @@ main {
   height: 100%;
   z-index: 50;
   color: #eee;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+.card {
+  width: 60%;
+  background-color: rgba(225,225,225,.7);
+  color: #2d2d2d;
+  padding: 3rem;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.margin-bottom {
+  margin-bottom: 1rem;
+}
+
+button, input[type="submit"] {
+  padding: 1rem 1.5rem;
+  background-color: darkseagreen;
+  color: white;
+  display: block;
+}
+
+label {
+  display: block;
+}
+
+input[type="text"], input[type="tel"], input[type="email"] {
+  height: 3rem;
+  font-size: 1.5rem;
+  min-width: 80%;
+  color: #2d2d2d;
+  text-align: center;
+}
+
 
 @-webkit-keyframes images{
   0%{

@@ -34,17 +34,33 @@ const verification = (dataProvider:DataProvider) => (type: 'EMAIL' | 'PHONE', va
 
     return authDao.validateChallenge(type,value, code)
         .then((result:{isValid: boolean, id: string, userId:string}) =>{
-            const {isValid} = result;
+            const {isValid, userId} = result;
             // Invalid authentication
             if(!isValid) {
+                if(!userId) {
+                    return authDao.createChallenge(type,value).then((response:{id:string, challenge:string}) => {
+                        // lets send sms or email based on criteria
+                        console.log('created challenge and sent message');
+                        sendMessageTo(value,response.challenge);
+
+                        return {
+                            id:response.id,
+                            status:'pending',
+                            data: undefined,
+                            message: preparedInfoMessage
+                        }
+                    });
+                }
+
                 return authDao.createChallenge(type,value).then((response:{id:string, challenge:string}) => {
                     // lets send sms or email based on criteria
                     console.log('created challenge and sent message');
                     sendMessageTo(value,response.challenge);
 
                     return {
-                        id:response.id,
-                        status:'pending',
+                        id:result.id,
+                        userId:userId,
+                        status:'invalid',
                         data: undefined,
                         message: preparedInfoMessage
                     }

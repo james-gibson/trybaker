@@ -7,15 +7,20 @@
   <body>
     <main>
       <h1><%= title %></h1>
-      <p>Welcome to <%= title %> <%= data %></p>
+      <p>Welcome to your TryBaker Dashboard</p>
 
+      <div class="card">
+        <p><%= firstName %> <%= lastName %></p>
+        <p><%= email %></p>
+        <p><%= phone %></p>
 
-      <p>You have <% total %> points</p>
-      <ul>
-          <% entries.forEach(function(e){ %>
-            <li><% e.entry %></li>
-          <% }); %>
-      </ul>
+        <h2>You have <%= total %> points and have checked in <%= visits %> times.</h2>
+        <ul>
+            <% entries.forEach(function(e){ %>
+              <li><%= e.entry %></li>
+            <% }); %>
+        </ul>
+      </div>
     </main>
   </body>
 </html>

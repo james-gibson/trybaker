@@ -50,6 +50,9 @@ const verifyPhone = (req, res) => {
     verify('PHONE', phone, code)
         .then(input => {
             return userService.getUserByPhone(phone).then(user => {
+                console.log('---------------------')
+                console.log(user)
+                console.log('---------------------')
                 return {user, verification: input, data: undefined}
             })
         })
@@ -66,11 +69,14 @@ const verifyPhone = (req, res) => {
             }
 
             if (firstName && lastName && email) {
-                if(req.query.f) {tmpUser.firstName = req.query.f;}
-                if(req.query.l) {tmpUser.lastName = req.query.l;}
-                if(req.query.e) {tmpUser.emailAddress = req.query.e;}
-                if(req.query.phone) {tmpUser.phoneNumber = phone;}
+                if(!tmpUser.firstName && req.query.f) {tmpUser.firstName = req.query.f;}
+                if(!tmpUser.lastName && req.query.l) {tmpUser.lastName = req.query.l;}
+                if(!tmpUser.emailAddress && req.query.e) {tmpUser.emailAddress = req.query.e;}
+
             }
+
+            if(!tmpUser.phoneNumber && req.query.phone) {tmpUser.phoneNumber = phone;}
+
             return {user: tmpUser, verification, data: undefined};
         }).then(input => {
             const {user, verification} = input;

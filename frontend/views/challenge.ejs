@@ -5,26 +5,68 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    <main>
     <h1><%= title %></h1>
-    <p>We just sent you a text to <%= phone %></p>
+      <div class="card">
+        <p>We just sent you a text to <%= phone %></p>
 
-    <form action="/verification" method="post">
-      <label for="phoneNumber">The number you provided: </label>
-      <input id="phoneNumber" type="disabled" name="phone" value="<%= phone %>">
-      <br>
-      <label for="code">Please enter the code we just sent: </label>
-      <input id="code" required="true" type="text" name="code" value="">
-      <br>
-      <br>
-      <label for="fname">What is your first name?</label>
-      <input id="fname" required="true" type="text" name="fName" value="">
-      <br>
-      <label for="lname">What is your last name?</label>
-      <input id="lname" required="true" type="text" name="lName" value="">
-      <br>
-      <label for="email">What is your email?</label>
-      <input id="email" required="true" type="text" name="email" value="">
-      <input type="submit" value="OK">
-    </form>
+        <form action="/verification" method="post">
+          <label for="phoneNumber">The number you provided: </label>
+          <input type="tel"
+                 id="phoneNumber"
+                 type="disabled"
+                 name="phone"
+                 value="<%= phone %>"
+                 class="margin-bottom"
+          >
+          <label for="code">Please enter the code we just sent: </label>
+          <input id="code"
+                 required="true"
+                 type="text"
+                 name="code"
+                 value=""
+                 class="margin-bottom"
+          >
+
+          <label for="fname"
+                  <% if (!doesUserExist) { %> hidden="true" <%}%>
+          >What is your first name?</label>
+          <input id="fname"
+                 required="true"
+                 type="text"
+                  <% if (!doesUserExist) { %> hidden="true" <%}%>
+                 name="fName"
+                 value="<%= fName %>"
+                 class="margin-bottom"
+          >
+          <label for="lname"
+                  <% if (!doesUserExist) { %> hidden="true" <%}%>
+          >What is your last name?</label>
+          <input id="lname"
+                 required="true"
+                 type="text"
+                  <% if (!doesUserExist) { %> hidden="true" <%}%>
+                 name="lName"
+                 value="<%= lName %>"
+                 class="margin-bottom"
+          >
+          <label for="email"
+                 <% if (!doesUserExist) { %> hidden="true" <%}%>
+          >What is your email?</label>
+          <input id="email"
+                 required="true"
+                 type="email"
+                  <% if (!doesUserExist) { %> hidden="true" <%}%>
+                 name="email"
+                 value="<%= email %>"
+                 class="margin-bottom"
+          >
+
+          <div class="flex-row">
+            <input type="submit" value="OK">
+          </div>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

@@ -85,7 +85,7 @@ const validateChallenge = table => (type, value, code) =>
                         challenge:record.challenge
                     };
                 }
-            })
+            });
 
 
 class AuthDAO {

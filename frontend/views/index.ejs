@@ -5,13 +5,27 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <main>
+      <h1><%= title %></h1>
 
-    <form action="/login/" method="post">
-      <label for="phoneNumber">Enter your phone number: </label>
-      <input id="phoneNumber" type="text" name="phone" value="">
-      <input type="submit" value="OK">
-    </form>
+      <div class="card">
+        <p class="margin-bottom">Check in and get points to use on your dispensary purchases!</p>
+        <form action="/login/" method="post">
+          <label for="phoneNumber"
+                 class="margin-bottom">Enter your phone number: </label>
+          <input id="phoneNumber"
+                 type="text"
+                 name="phone"
+                 value=""
+                 placeholder="XXX-XXX-XXXX"
+                 class="margin-bottom"
+          >
+          <div class="flex-row">
+            <input type="submit" value="OK">
+          </div>
+        </form>
+      </div>
+
+    </main>
   </body>
 </html>

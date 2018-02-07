@@ -8,8 +8,7 @@ const sendCode = (phone) => {
     "use strict";
     return rp(`http://loyalty-api:3000/api/verify/phone/${phone}?code=new`)
         .then(result => {
-            console.log(result)
-            return true;
+            return result;
         }).catch(err => {
             console.log(err)
             return false;
@@ -38,26 +37,21 @@ const getData = (code,phone,fName,lName,email) => {
 };
 
 
-const validationIndex = (req) => {
-    "use strict";
-
-};
-
-
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Welcome!' });
+  res.render('index', { title: 'Welcome to TryBaker!' });
 });
 
 router.get('/challenge', function(req, res) {
-    const {phone, fName,lName,email}  = req.query;
+    const {phone, f,l,e, userId}  = req.query;
 
     res.render('challenge', {
-        title: 'Whoops, we need to verify this',
+        title: userId ? 'Welcome back,' : 'Lets get you verified:',
         phone,
-        fName,
-        lName,
-        email,
+        fName: f,
+        lName: l,
+        email: e,
+        doesUserExist: !userId,
     });
 });
 
@@ -68,7 +62,28 @@ router.get('/dashboard', function(req, res) {
 
         getData(code,phone,f,l,e)
             .then(results => {
-                res.render('dashboard', { title: 'Dashboard', phone:phone, data:results, total:results.data.total, entries:results.data.entries});
+                if(results.status == 'invalid') {
+                    let userId;
+                    if(results.user) {
+                        userId = results.user.id;
+                    }
+                    return res.redirect(`/challenge?phone=${phone}&userId=${userId}&errors=['Expired Session']&code=${code}&f=${f}&l=${l}&e=${e}`);
+                }
+
+                console.log('dashboard hydration? ', {results,code,phone,f,l,e})
+                const user = results.user;
+                const data = results.data;
+                res.render('dashboard', {
+                    title: 'TryBaker v0.1',
+                    total: data.total,
+                    visits: data.entries.length,
+                    entries: data.entries,
+                    phone: phone,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.emailAddress,
+                    userId: user.id,
+                });
             })
     }, 1000)
 
@@ -81,10 +96,17 @@ router.get('/dashboard', function(req, res) {
 router.post('/login', function(req,res,next) {
     console.log('login post', req.body);
     if(!req.body.phone) {return res.redirect('/')}
+
     sendCode(req.body.phone).then(result => {
         "use strict";
-        if(result)
-            res.redirect(`/challenge?phone=${req.body.phone}`);
+        console.log('+++++++++++++++++++++++++++++++')
+        console.log('result', result)
+        console.log('+++++++++++++++++++++++++++++++')
+        if(result){
+            let userId = result.userId  || '';
+            res.redirect(`/challenge?phone=${req.body.phone}&userId=${userId}`);
+        }
+
         else
             res.redirect('/');
     })

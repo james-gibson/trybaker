@@ -3,11 +3,14 @@ import PointsDAO from './data/dao/PointsDao.mjs';
 import User from '../models/User.mjs';
 import type {DataProvider} from './data/dataProvider.mjs';
 import PROVIDERS from './data/providers/providerEnum.mjs';
+import UserService from "./UserService.mjs";
+import SendgridProvider from "./data/providers/sendgridProvider.mjs";
 
 
-const checkIn = dataProvider => (userId:string, qty:number) => {
-    const sendgridProvider =dataProvider.get(PROVIDERS.SENDGRID);
+const checkIn = (dataProvider:DataProvider) => (userId:string, qty:number) => {
+    const sendgridProvider = dataProvider.get(PROVIDERS.SENDGRID);
     const pointsDAO = new PointsDAO(dataProvider.get(PROVIDERS.POSTGRES));
+    const userService = new UserService(dataProvider);
 
     return pointsDAO.canCheckIn(userId)
         .then((canCheckIn:boolean) => {
@@ -15,7 +18,16 @@ const checkIn = dataProvider => (userId:string, qty:number) => {
 
             return pointsDAO.sumEntriesByUserId(userId).then((pointSum:number) => {
                 let subTotal = pointSum + qty;
-                console.log('send email here', subTotal);
+                userService.getUserById(userId)
+                    .then((user:?User) => {
+                        const msg = 'We are emailing you to let you know that you have successfully signed in and have '+ subTotal + ' points.';
+                        const send = sendgridProvider.sendEmail('Thanks for using TryBaker')(msg);
+                        if(user && user.emailAddress) {
+                            send(user.emailAddress);
+                        }
+                    });
+
+                //sendTestEmail('james@gibsunas.co');
                 pointsDAO.addTransaction(userId,qty);
             })
         })
