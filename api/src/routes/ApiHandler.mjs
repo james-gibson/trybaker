@@ -79,6 +79,17 @@ const verifyPhone = (req, res) => {
 
             return {user: tmpUser, verification, data: undefined};
         }).then(input => {
+            return Promise.resolve(input);
+            //This isnt working but i'm out of time
+            // const {user} = input;
+            // if(user && !user.id) { return input;}
+            //
+            // return userService.updateUser(input.user).then((user:User) => {
+            //     const tmp  = {...input};
+            //     tmp.user = user;
+            //     return tmp;
+            // })
+        }).then(input => {
             const {user, verification} = input;
 
             // lets bail early if verification was invalid

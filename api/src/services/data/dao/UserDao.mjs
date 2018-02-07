@@ -51,6 +51,18 @@ const deleteUserById = table => (id: string) =>
             .catch(reject);
     });
 
+const updateUser = table => (user:User) =>
+    new Promise((resolve: (*) => void, reject) => {
+        table
+            .update(userDTO.toPostgres(user))
+            .returning('*')
+            .where('id', user.id)
+            .then(userDTO.fromPostgres)
+            .then(resolve)
+            .catch(reject);
+    });
+
+
 const getUserByField = table => field => value =>
     new Promise((resolve: (?User) => void, reject) => {
         table
@@ -65,7 +77,8 @@ const getUserByField = table => field => value =>
     });
 
 class UserDAO {
-    createUser: (user: User) => Promise<User>;
+    createUser: (user: * ) => Promise<User>;
+    updateUser: (user: User) => Promise<User>;
     deleteUserById: (id: string) => Promise<*>;
     getUserByEmail: (email: string) => Promise<?User>;
     getUserById: (id: string) => Promise<?User>;
@@ -75,6 +88,7 @@ class UserDAO {
         const table = knex(`users`);
 
         this.createUser = createUser(table);
+        this.updateUser = updateUser(table);
         this.deleteUserById = deleteUserById(table);
         this.getUserByEmail = (email: string) => getUserByField(table)('emailAddress')(email);
         this.getUserById = (id: string) => getUserByField(table)('id')(id);

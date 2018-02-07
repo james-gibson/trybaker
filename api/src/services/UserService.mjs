@@ -19,9 +19,11 @@ const getUserByEmail = dao => (email: string) => dao.getUserByEmail(email);
 const getUserById = dao => (id: string) => dao.getUserById(id);
 
 const getUserByPhone = dao => (phone: string) => dao.getUserByPhone(phone);
+const updateUser = dao => (user:User) => dao.updateUser(user);
 
 class UserService {
     createUser: (data: User) => Promise<User>;
+    updateUser: (data: User) => Promise<User>;
     deleteUser: (data: User) => Promise<*>;
     getUser: (user: User) => Promise<?User>;
     getUserByEmail: (email: string) => Promise<?User>;
@@ -32,6 +34,7 @@ class UserService {
         const userDAO = new UserDAO(dataProvider.get(PROVIDERS.POSTGRES));
 
         this.createUser = createUser(userDAO);
+        this.updateUser = updateUser(userDAO);
         this.deleteUser = deleteUser(userDAO);
         this.getUser = getUser(userDAO);
         this.getUserByEmail = getUserByEmail(userDAO);
