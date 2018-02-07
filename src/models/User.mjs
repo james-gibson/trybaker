@@ -7,9 +7,9 @@ class User {
     phoneNumber:string;
     validEmail:boolean;
     validPhone:boolean;
-    constructor() {
+    newCustomer:boolean;
 
-    }
+    constructor() {}
 }
 
 export default User;
