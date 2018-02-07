@@ -5,19 +5,17 @@ networks:
     external: false
 
 services:
+  db:
+    image: postgres:9.6.6-alpine
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_USER: BAKER
+      POSTGRES_PASSWORD: TRYBAKERPASSWORD
   loyalty-api:
     build: .
     ports:
       - "3000:3000"
     depends_on:
-      - "postgres"
-    networks:
-      - "internal"
-  postgres:
-    image: postgres:9.6.6-alpine
-    ports:
-      - "5432:5432"
-    networks:
-      - "internal"
-    environment:
-      POSTGRES_PASSWORD: TRYBAKERPASSWORD
+      - "db"
+
