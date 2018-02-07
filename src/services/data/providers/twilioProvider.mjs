@@ -27,7 +27,6 @@ class TwilioProvider extends BaseProvider {
         this.service = {
             sendSMS: sendSMS(twilio)
         };
-        //sendSMS(twilio)('4439073453')('hello world');
     }
 }
 
