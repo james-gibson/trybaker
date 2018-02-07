@@ -6,6 +6,7 @@ src/*
 
 [ignore]
 .*/node_modules/.*
+.*/migrations/.*
 
 [libs]
 flow-typed
