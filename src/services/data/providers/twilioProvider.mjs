@@ -6,7 +6,7 @@ import Twilio from 'twilio';
 
 const appPhoneNumber = '+17206059279';
 
-const sendSMS = twilio => (phoneNumber:string) => (message:string) => twilio.messages.create({
+const sendSMS = twilio => (message:string) => (phoneNumber:string) => twilio.messages.create({
     from: appPhoneNumber,
     body: message,
     to: phoneNumber
