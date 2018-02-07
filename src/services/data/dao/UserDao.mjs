@@ -4,11 +4,13 @@ import User from '../../../models/User.mjs';
 const userDTO = {
     toPostgres: (input: User): * => {
         const result = {
+            firstName: input.firstName,
+            lastName: input.lastName,
             phoneNumber: input.phoneNumber,
             emailAddress: input.emailAddress,
             validatedPhoneNumber: input.validPhone,
-            validatedEmail: input.validEmail,
-
+            validatedEmailAddress: input.validEmail,
+            newCustomer : input.newCustomer,
         };
 
         return result;
@@ -18,10 +20,13 @@ const userDTO = {
 
         const user = new User();
         user.id =  input.id;
+        user.lastName = input.lastName;
+        user.firstName = input.firstName
         user.phoneNumber = input.phoneNumber;
         user.emailAddress = input.emailAddress;
         user.validPhone = input.validatedPhoneNumber;
-
+        user.validEmail = input.validatedEmailAddress;
+        user.newCustomer = input.newCustomer;
         return user;
     },
 };
@@ -71,9 +76,9 @@ class UserDAO {
 
         this.createUser = createUser(table);
         this.deleteUserById = deleteUserById(table);
-        this.getUserByEmail = (email: string) => getUserByField(table)('email_address')(email);
+        this.getUserByEmail = (email: string) => getUserByField(table)('emailAddress')(email);
         this.getUserById = (id: string) => getUserByField(table)('id')(id);
-        this.getUserByPhone = (phone: string) => getUserByField(table)('phone_number')(phone);
+        this.getUserByPhone = (phone: string) => getUserByField(table)('phoneNumber')(phone);
     }
 }
 

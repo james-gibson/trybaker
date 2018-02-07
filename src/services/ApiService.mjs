@@ -10,7 +10,7 @@ const prepareActionMessage = (dataProvider:DataProvider) => (type: 'EMAIL' | 'PH
     if(type == 'EMAIL') {
         return (email:string, code:string) => {
             const header = 'Hi from TryBaker';
-            const body = `Looks like you are trying to log in, please click http://localhost:3000/api/verify/email/${email}/${code}`;
+            const body = `Looks like you are trying to log in, please click http://localhost:3000/api/verify/email/${email}?code=${code}`;
             sendgrid.sendEmail(header)(body)(email);
         }
     } else {
@@ -33,32 +33,47 @@ const verification = (dataProvider:DataProvider) => (type: 'EMAIL' | 'PHONE', va
     const sendMessageTo = prepareActionMessage(dataProvider)(type);
 
     return authDao.validateChallenge(type,value, code)
-        .then(isValid =>{
+        .then((result:{isValid: boolean, id: string, userId:string}) =>{
+            const {isValid} = result;
+            // Invalid authentication
             if(!isValid) {
-                return authDao.createChallenge(type,value).then((challengeCode:string) => {
+                return authDao.createChallenge(type,value).then((response:{id:string, challenge:string}) => {
                     // lets send sms or email based on criteria
-                    sendMessageTo(value,challengeCode);
+                    console.log('created challenge and sent message');
+                    sendMessageTo(value,response.challenge);
 
                     return {
+                        id:response.id,
                         status:'pending',
                         data: undefined,
                         message: preparedInfoMessage
                     }
                 });
-            } else {
-                return {
-                    status:'valid',
-                    data: {fakeUser:123},
-                    message: 'Success'
-                }
             }
-        })
+
+            // Valid authentication
+            return {
+                id:result.id,
+                userId: result.userId,
+                status:'valid',
+                data: undefined,
+                message: 'Success'
+            }
+        }).catch(console.log);
 };
+
+const connect = (dataProvider: DataProvider) => (id:string) => (userId:string) => {
+    const authDao = new AuthDAO(dataProvider.get(PROVIDERS.POSTGRES));
+
+    return authDao.addUserIdById(id)(userId);
+}
 
 class ApiService {
     verify: (type: 'EMAIL' | 'PHONE', value:string, code:string) => Promise<*>;
+    connectToUser: (verificationId:string) => (userId:string) => Promise<void>;
     constructor(dataProvider:DataProvider) {
         this.verify = verification(dataProvider);
+        this.connectToUser = connect(dataProvider)
     }
 }
 
