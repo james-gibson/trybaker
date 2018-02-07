@@ -13,9 +13,16 @@ services:
       POSTGRES_USER: BAKER
       POSTGRES_PASSWORD: TRYBAKERPASSWORD
   loyalty-api:
-    build: .
+    build: ./api
     ports:
       - "3000:3000"
     depends_on:
       - "db"
+  loyalty-frontend:
+    build: ./frontend
+    ports:
+      - "3001:3000"
+    depends_on:
+      - "loyalty-api"
+
 
