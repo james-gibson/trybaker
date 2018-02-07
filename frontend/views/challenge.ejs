@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>We just sent you a text to <%= phone %></p>
+
+    <form action="/verification" method="post">
+      <label for="phoneNumber">The number you provided: </label>
+      <input id="phoneNumber" type="disabled" name="phone" value="<%= phone %>">
+      <br>
+      <label for="code">Please enter the code we just sent: </label>
+      <input id="code" required="true" type="text" name="code" value="">
+      <br>
+      <br>
+      <label for="fname">What is your first name?</label>
+      <input id="fname" required="true" type="text" name="fName" value="">
+      <br>
+      <label for="lname">What is your last name?</label>
+      <input id="lname" required="true" type="text" name="lName" value="">
+      <br>
+      <label for="email">What is your email?</label>
+      <input id="email" required="true" type="text" name="email" value="">
+      <input type="submit" value="OK">
+    </form>
+  </body>
+</html>

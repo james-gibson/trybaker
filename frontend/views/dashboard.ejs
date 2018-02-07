@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <main>
+      <h1><%= title %></h1>
+      <p>Welcome to <%= title %> <%= data %></p>
+
+
+      <p>You have <% total %> points</p>
+      <ul>
+          <% entries.forEach(function(e){ %>
+            <li><% e.entry %></li>
+          <% }); %>
+      </ul>
+    </main>
+  </body>
+</html>

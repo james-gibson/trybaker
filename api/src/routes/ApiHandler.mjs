@@ -66,10 +66,10 @@ const verifyPhone = (req, res) => {
             }
 
             if (firstName && lastName && email) {
-                tmpUser.firstName = req.query.f;
-                tmpUser.lastName = req.query.l;
-                tmpUser.emailAddress = req.query.e;
-                tmpUser.phoneNumber = phone;
+                if(req.query.f) {tmpUser.firstName = req.query.f;}
+                if(req.query.l) {tmpUser.lastName = req.query.l;}
+                if(req.query.e) {tmpUser.emailAddress = req.query.e;}
+                if(req.query.phone) {tmpUser.phoneNumber = phone;}
             }
             return {user: tmpUser, verification, data: undefined};
         }).then(input => {
@@ -78,7 +78,10 @@ const verifyPhone = (req, res) => {
             // lets bail early if verification was invalid
             if (verification.status !== 'valid') {
                 console.log('invalid code used');
-                return input;
+                const tmp  = {...input};
+                tmp.verification = {...input.verification};
+                tmp.verification.status = 'invalid';
+                return tmp;
             }
 
             if (!user.id) {
@@ -135,7 +138,7 @@ const verifyPhone = (req, res) => {
                     return tmp;
                 });
         }).then((httpResult:*) => {
-             res.json({...httpResult.verification, data : httpResult.data});
+             res.json({...httpResult.verification, data : httpResult.data, user: httpResult.user});
         }).catch(console.log)
 
 };
