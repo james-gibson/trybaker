@@ -1,4 +1,5 @@
 //@flow
+import Knex from 'knex';
 import BaseProvider from './baseProvider.mjs';
 import PROVIDERS from "./providerEnum.mjs";
 
@@ -7,11 +8,17 @@ class PostGresProvider extends BaseProvider {
     service: *;
 
     constructor() {
-        console.log('    Initializing False Postgres Provider')
+        console.log('    Initializing Postgres Provider')
         super();
         this.key = PROVIDERS.POSTGRES;
 
-        this.service = {};
+
+        const conn = Knex({
+            client: 'pg',
+            connection: process.env.DATABASE_URL,
+        });
+
+        this.service = conn;
     }
 }
 
