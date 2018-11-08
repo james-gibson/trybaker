@@ -31,50 +31,32 @@ const userDTO = {
     },
 };
 
-const createUser = table => (user: User) => new Promise((resolve, reject) => {
-    table.insert(userDTO.toPostgres(user))
-        .returning('*')
-        .then((result) => {
-            if (!result) { return reject(new Error('Something unexpected happened')); }
+const createUser = table => (user: User) => table
+    .insert(userDTO.toPostgres(user))
+    .returning('*')
+    .then((result) => {
+        if (!result) { return reject(new Error('Something unexpected happened')); }
 
-            return resolve(result.map(userDTO.fromPostgres)[0]);
-        })
-        .catch(reject);
-});
-
-const deleteUserById = table => (id: string) =>
-    new Promise((resolve: (*) => void, reject) => {
-        table
-            .where('id', id)
-            .del()
-            .then(resolve)
-            .catch(reject);
+        return result.map(userDTO.fromPostgres)[0];
     });
+    
 
-const updateUser = table => (user:User) =>
-    new Promise((resolve: (*) => void, reject) => {
-        table
-            .update(userDTO.toPostgres(user))
-            .returning('*')
-            .where('id', user.id)
-            .then(userDTO.fromPostgres)
-            .then(resolve)
-            .catch(reject);
-    });
+const deleteUserById = table => (id: string) => table
+    .where('id', id)
+    .del();
+
+const updateUser = table => (user: User) => table
+    .update(userDTO.toPostgres(user))
+    .returning('*')
+    .where('id', user.id)
+    .then(userDTO.fromPostgres);
 
 
 const getUserByField = table => field => value =>
-    new Promise((resolve: (?User) => void, reject) => {
-        table
-            .where(field, value)
-            .limit(1)
-            .then((result: Array<*>) => {
-                resolve(userDTO.fromPostgres(result[0]));
-            })
-            .catch((err) => {
-                reject(err);
-            });
-    });
+    table
+        .where(field, value)
+        .limit(1)
+        .then((result: Array<*>) => userDTO.fromPostgres(result[0]));
 
 class UserDAO {
     createUser: (user: * ) => Promise<User>;
