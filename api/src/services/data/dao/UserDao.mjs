@@ -35,7 +35,7 @@ const createUser = table => (user: User) => table
     .insert(userDTO.toPostgres(user))
     .returning('*')
     .then((result) => {
-        if (!result) { return reject(new Error('Something unexpected happened')); }
+        if (!result) { return Promise.reject(new Error('Something unexpected happened')); }
 
         return result.map(userDTO.fromPostgres)[0];
     });
